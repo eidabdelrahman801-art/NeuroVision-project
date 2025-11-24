@@ -3,24 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Website</title>
-
+    <title>Rate Random Artwork</title>
     <style>
+        /* CSS for styling the webpage */
         body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             margin: 0;
-            padding: 0;
-            overflow: hidden;
+            color: #333;
+            direction: ltr; /* Ensure left-to-right direction for English */
         }
-        iframe {
-            width: 100vw;
-            height: 100vh;
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: fadeIn 0.8s ease-out;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 2.2em;
+        }
+        .art-image {
+            width: 100%;
+            max-height: 350px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease-in-out;
+        }
+        .art-image:hover {
+            transform: scale(1.01);
+        }
+        .rating-buttons button {
+            color: white;
             border: none;
+            padding: 12px 25px;
+            margin: 0 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .rating-buttons button:hover {
+            transform: translateY(-2px);
+        }
+        /* Specific button colors based on the data-rating attribute */
+        .rating-buttons button[data-rating="Poor"] {
+            background-color: #f44336; /* Red for Poor */
+        }
+        .rating-buttons button[data-rating="Poor"]:hover {
+            background-color: #da190b;
+        }
+        .rating-buttons button[data-rating="Fair"] {
+            background-color: #ffc107; /* Amber for Fair */
+            color: #333;
+        }
+        .rating-buttons button[data-rating="Fair"]:hover {
+            background-color: #e0a800;
+        }
+        .rating-buttons button[data-rating="Excellent"] {
+            background-color: #4CAF50; /* Green for Excellent */
+        }
+        .rating-buttons button[data-rating="Excellent"]:hover {
+            background-color: #45a049;
+        }
+        #message {
+            margin-top: 25px;
+            font-size: 1.1em;
+            color: #007bff;
+            font-weight: bold;
+            min-height: 25px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Rate This Random Piece of Art</h1>
+        
+        <img id="artDisplay" src="https://picsum.photos/400/300?random=1" alt="Random Artwork Image" class="art-image">
+        
+        <div class="rating-buttons">
+            <button data-rating="Poor" onclick="rateArt('Poor')">Poor 👎</button>
+            <button data-rating="Fair" onclick="rateArt('Fair')">Fair 😐</button>
+            <button data-rating="Excellent" onclick="rateArt('Excellent')">Excellent 👍</button>
+        </div>
 
-    <iframe src="https://mgx-yt1ct1a8o5.mgx.world/" allowfullscreen></iframe>
+        <p id="message"></p>
+    </div>
 
+    <script>
+        // JavaScript for interactivity
+        
+        // List of image URLs to display randomly
+        const artImages = [
+            'https://picsum.photos/400/300?random=1',
+            'https://picsum.photos/400/300?random=2',
+            'https://picsum.photos/400/300?random=3',
+            'https://picsum.photos/400/300?random=4',
+            'https://picsum.photos/400/300?random=5',
+            'https://picsum.photos/400/300?random=6',
+            'https://picsum.photos/400/300?random=7',
+            'https://picsum.photos/400/300?random=8',
+            'https://picsum.photos/400/300?random=9',
+            'https://picsum.photos/400/300?random=10'
+        ];
+
+        let currentImageIndex = -1; // Tracks the currently displayed image index
+
+        // Function to select and display a new random image
+        function displayRandomArt() {
+            const artDisplay = document.getElementById('artDisplay');
+            let randomIndex;
+            do {
+                // Generate a random index
+                randomIndex = Math.floor(Math.random() * artImages.length);
+            } while (randomIndex === currentImageIndex); // Prevent showing the same image twice in a row
+
+            currentImageIndex = randomIndex;
+            artDisplay.src = artImages[randomIndex];
+            document.getElementById('message').textContent = ''; // Clear the previous message
+        }
+
+        // Function called when a rating button is clicked
+        function rateArt(rating) {
+            const messageElement = document.getElementById('message');
+            // User feedback message in English
+            messageElement.textContent = `Thank you! You rated the artwork as: ${rating}.`;
+            
+            // Wait for 1 second, then display a new piece of art
+            setTimeout(() => {
+                displayRandomArt();
+            }, 1000); // 1000 milliseconds = 1 second
+        }
+
+        // Call the displayRandomArt function when the page first loads
+        window.onload = displayRandomArt;
+    </script>
 </body>
 </html>
